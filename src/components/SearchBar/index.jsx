@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { useRef } from 'react';
 
-const SearchBar = ({ onSubmit }) => {
+const SearchBar = ({ onSubmit, ...props }) => {
     const [focused, setFocused] = useState(false);
     const [searchTerms, setSearchTerms] = useState('');
     
@@ -16,18 +16,15 @@ const SearchBar = ({ onSubmit }) => {
         inputElmt.current.focus();
     }, [focused]);
 
-    const onSearchTermsChange = (e) => {
-        setSearchTerms(e.target.value);
-    };
+    const onSearchTermsChange = (e) => setSearchTerms(e.target.value);
     const clearSearchTerms = (e) => {
-        e.stopPropagation()
-        inputElmt.current.focus();
         setSearchTerms('');
+        inputElmt.current.focus();
     };
     const submitSearchTerms = () => onSubmit(searchTerms);
 
     return (
-        <label className={`searchbar ${focused && 'searchbar--focused'}`}>
+        <label className={`searchbar ${focused ? 'searchbar--focused' : ''}`}>
             <input
                 ref={inputElmt}
                 className='searchbar__input'
@@ -38,6 +35,7 @@ const SearchBar = ({ onSubmit }) => {
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
                 onChange={onSearchTermsChange}
+                {...props}
             />
 
             <button

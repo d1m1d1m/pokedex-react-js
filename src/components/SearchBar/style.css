@@ -14,8 +14,8 @@
 }
 
 .searchbar {
-    --mainPadding: 6px;
-    --borderRadiusSubmitBtn: 8px;
+    --mainPadding: 4px;
+    --borderRadiusSubmitBtn: 10px;
     --mainBorderRadius: calc(var(--borderRadiusSubmitBtn) + var(--mainPadding));
 }
 
@@ -47,6 +47,7 @@ button.searchbar__reset {
     justify-content: center;
     color: #ef5350;
     margin: 8px;
+    padding: 0;
     cursor: pointer;
 }
 .searchbar__reset:disabled {
@@ -60,6 +61,6 @@ button.searchbar__submit {
     justify-content: center;
     color: #fff;
     padding: 8px;
-    border-radius: 8px;
+    border-radius: var(--borderRadiusSubmitBtn);
     background-color: #ef5350;
 }
