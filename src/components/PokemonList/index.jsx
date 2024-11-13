@@ -3,7 +3,7 @@ import PokemonItem from '../PokemonItem';
 
 const PokemonList = ({ pokemons }) => {
     return (
-        <ul className="pokemon-list">
+        <ul className="grid-cols-3 h-full">
             {
                 pokemons.map((currentPokemon) => <PokemonItem {...currentPokemon}/>)
             }

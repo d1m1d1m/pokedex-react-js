@@ -1,10 +1,30 @@
 import axios from "axios";
 import { setupCache } from "axios-cache-interceptor";
 
+
+
+export const CLIENTS = {
+    'pokemon': setupCache(axios.create({
+        baseURL: 'https://pokeapi.co/api/v2/pokemon/'
+    })),
+    'types': setupCache(axios.create({
+        baseURL: 'https://pokeapi.co/api/v2/type/'
+    }))
+};
+
+export const FETCH_FILTERS = {
+    'BY_POKEMON': useBaseUrl('pokemon'),
+    'BY_SPECIES': useBaseUrl('pokemon-species'),
+    'BY_GENERATION': useBaseUrl('generation'),
+    'BY_TYPES': useBaseUrl('types')
+};
+
+function useBaseUrl(pathname) {
+    return new URL(`https://pokeapi.co/api/v2/${pathname}`);
+}
+
 /* --- Init axios instance --- */
-const PokeApiAxiosInstance = axios.create({
-    
-});
+const PokeApiAxiosInstance = axios.create();
 const PokeApi = setupCache(
     PokeApiAxiosInstance,
     {
@@ -13,21 +33,11 @@ const PokeApi = setupCache(
 );
 /* --------------------------- */
 
-export async function getPokemon(id) {
-    const req = await PokeApi.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
-    return req;
+export async function getPokemons(filterName) {
+    return await PokeApi.get(FETCH_FILTERS[filterName].href);
 };
 
-export async function getAllPokemons(limit, offset) {
-    if(!limit) { limit = 20 };
-    if(!offset) { offset = 0 };
-
-    const req = await PokeApi.get(`https://pokeapi.co/api/v2/pokemon?offset=${offset}&limit=${limit}`);
-    const pokemonRequestCollection = req.data.results.map(
-        async (pokemon) => (await PokeApi.get(pokemon.url)).data
-    );
-
-    req.data.results = await Promise.all(pokemonRequestCollection);
-
-    return req;
+export async function getResource(endpointName) {
+    const targetedClient = CLIENTS[endpointName];
+    return await targetedClient.get('?limit=30');
 };
