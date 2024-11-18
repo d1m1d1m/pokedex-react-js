@@ -1,13 +1,7 @@
-import axios from "axios";
-import { setupCache } from "axios-cache-interceptor";
 import { useEffect, useState } from "react";
+import { PokeApi } from "../utils/PokeApi";
 
-// Axios and cahing setup
-const PokeApi = setupCache(
-    axios.create()
-);
-
-export const usePokeApi = (url) => {
+export const usePokeApi = (url, dataHandler) => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -20,7 +14,12 @@ export const usePokeApi = (url) => {
     };
 
     useEffect(() => {
-        fetchData();
+        setLoading(true);
+
+        PokeApi.get(url)
+            .then(dataHandler)
+            .catch((error) => setError(error))
+            .finally(() => setLoading(false));
     }, []);
 
     return {
