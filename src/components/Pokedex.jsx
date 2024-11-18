@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import RadioGroup from "./RadioGroup";
 import { PokeApi } from "../utils/PokeApi";
+import PokemonList from "./PokemonList";
 
 const pokemonTypes = [
     { label: "Normal", value: "normal" },
@@ -51,41 +52,18 @@ const Pokedex = () => {
         <div className="overflow-hidden flex flex-col container mx-auto px-24">
             <div className="">
                 <h1 className="text-2xl">Filtres</h1>
+                {typeFilter}
 
                 <RadioGroup
                     name="types"
                     items={pokemonTypes}
                     value={typeFilter}
-                    onChange={(nextType) => {
-                        setTypeFilter(nextType);
-                    }}
+                    onChange={setTypeFilter}
                 />
             </div>
 
             {
-                pokemons.length ?
-                    <ul className="overflow-y-scroll w-full grid grid-cols-3 gap-6 auto">
-                        {
-                            pokemons.map(({ id, name, sprites, types, species }) => (
-                                <li className="relative flex flex-col items-center shadow-md rounded-lg p-4 pt-10 mt-12 border">
-                                    <img className="absolute drop-shadow-md -top-14" src={sprites.front_default} alt="" />
-
-                                    
-
-                                    <h2 className="flex flex-col-reverse items-center justify-between capitalize my-2">
-                                        <span>{species.name}</span>
-                                        <span className="font-bold bg-slate-100 text-slate-600 px-2 rounded-lg">#{id}</span>
-                                    </h2>
-
-                                    <ul className="flex">
-                                        { types.map(({type}) => <li className="m-2 capitalize border px-4 text-sm rounded-md">{type.name}</li>) }
-                                    </ul>
-                                </li>
-                            ))
-                        }
-                    </ul>
-                    :
-                    <p>Pas de pokémon avec le type {typeFilter}</p>
+                pokemons.length ? <PokemonList pokemons={pokemons}/> : <p>Pas de pokémon avec le type {typeFilter}</p>
             }
         </div>
     );
