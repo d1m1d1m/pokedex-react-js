@@ -1,27 +1,22 @@
-import './App.css';
-import { Fragment } from "react";
-import logo from './assets/img/logo.png';
 import Pokedex from './components/Pokedex';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-
-const queryClient = new QueryClient();
+import logo from "./assets/logo.png";
+import PokemonGeneration from './constants/PokemonGenerations';
+import RadioGroup from './components/RadioGroup';
 
 const App = () => {
     return (
-        <Fragment>
-            <QueryClientProvider client={queryClient}>
-                <div className='h-screen flex'>
-                    <aside className='h-full w-fit flex flex-col shadow-md'>
-                        <header className='flex items-center justify-center border p-2'>
-                            <img className='size-12' src={logo} alt="" />
-                        </header>
-                    </aside>
-
-                    <Pokedex />
+        <div className='flex flex-col overflow-hidden h-screen min-h-screen bg-slate-200'>
+            <aside className='relative flex items-start bg-white shadow-md'>
+                <div className='bg-white w-96'>
+                    <img className='flex justify-center items-center size-16' src={logo} alt="" />
                 </div>
-            </QueryClientProvider>
-        </Fragment>
+            </aside>
+
+            <main className='flex'>
+                <Pokedex />
+            </main>
+        </div>
     );
-}
+};
 
 export default App;

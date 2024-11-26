@@ -1,11 +1,13 @@
-import PokemonCard from "./PokemonCard";
+import PokemonCard from "./Pokemon/PokemonCard";
 
-const PokemonList = ({ pokemons, filterName }) => {
+const PokemonList = ({ pokemons }) => {
+    const pokemonSpecies = pokemons.filter((p) => p.is_default);
+
+    if (pokemonSpecies.length === 0) return <p className="text-center text-gray-500">No Pokémon found.</p>;
+
     return (
-        <ul className="overflow-y-scroll w-full grid grid-cols-3 gap-6 auto">
-            {
-                pokemons.length ? pokemons.filter((p) => p.name.toLowerCase().trim().includes(filterName.toLowerCase())).map((currentPokemonData) => <PokemonCard key={currentPokemonData.id + currentPokemonData.name} {...currentPokemonData}/>) : "Pas de pokémons"
-            }
+        <ul className="overflow-y-scroll container h-screen p-6 flex flex-col gap-6 font-poppins scrollbar-hide">
+            {pokemonSpecies.map((pokemon) => <PokemonCard key={pokemon.id} pokemon={pokemon}/>)}
         </ul>
     );
 };
