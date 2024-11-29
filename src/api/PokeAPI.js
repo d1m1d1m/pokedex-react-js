@@ -1,19 +1,14 @@
-import axios from "axios";
-import { setupCache } from "axios-cache-interceptor";
 
-const instance = axios.create();
-export const PokeApi = setupCache(instance);
 
-export const fetchAllPokemons = async () => {
-    const { data } = await PokeApi.get('https://pokeapi.co/api/v2/pokemon-species?limit=1025');
+export class Pokemon {
+    static BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 
-    const pokemonRequestsMap = data.results.map(
-        async (resource) => {
-            const pokemonUrl = resource.url.replace('-species','');
-            const pokemonData = await PokeApi.get(pokemonUrl);
-            return pokemonData.data;
-        }
-    );
-    
-    return Promise.all(pokemonRequestsMap);
+    static fetch(start = 0, end = 25) {
+        const TARGET_URL = new URL(BASE_URL);
+
+        TARGET_URL.searchParams.set('offset', start);
+        TARGET_URL.searchParams.set('limit', end);
+
+        
+    };
 };

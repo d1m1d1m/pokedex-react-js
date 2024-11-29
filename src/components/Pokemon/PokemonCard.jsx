@@ -1,16 +1,27 @@
 import clsx from "clsx";
-import PokemonTypeIcon from "../TypeIcon/PokemonTypeIcon";
 import PokeballIcon from "../../assets/PokeballIcon";
+import PokemonTypesList from "./PokemonTypesList";
+import { useInView, useScroll } from "motion/react";
+import { useRef } from "react";
+import { useEffect } from "react";
+import { motion } from "motion/react";
+import PokeballOriginalIcon from "../../assets/PokeballOriginalIcon";
+import { useState } from "react";
 
 const PokemonCard = ({ pokemon }) => {
+    const [isCatched, setIsCatched] = useState(false);
     const PRIMARY_TYPE = pokemon.types[0].type.name;
+
+    const toggleIsCatched = (e) => setIsCatched(!isCatched)
 
     return (
         <li
+            onClick={toggleIsCatched}
             key={pokemon.name}
             className={clsx(
-                "group flex justify-between items-center rounded-2xl shadow-lg outline py-3 px-6 overflow-clip",
-                "hover:cursor-pointer",
+                "flex",
+                "rounded-2xl shadow-lg outline py-3 px-6 overflow-clip",
+                "group hover:cursor-pointer",
                 {
                     "bg-grass outline-grass/30": PRIMARY_TYPE === 'grass',
                     "bg-fire outline-fire/30": PRIMARY_TYPE === 'fire',
@@ -29,34 +40,41 @@ const PokemonCard = ({ pokemon }) => {
                     "bg-dragon outline-dragon/30": PRIMARY_TYPE === 'dragon',
                     "bg-dark outline-dark/30": PRIMARY_TYPE === 'dark',
                     "bg-ice outline-ice/30": PRIMARY_TYPE === 'ice',
-                    "bg-steel outline-steel/30": PRIMARY_TYPE === 'steel',
+                    "bg-steel outline-steel/30": PRIMARY_TYPE === 'steel'
                 }
             )}
         >
-            <div className="flex flex-col text-slate-800">
-                <div className="font-semibold bg-black/30 text-white/75 w-fit pr-3 rounded-full">
-                    <span className="px-2 rounded-full">#</span>
-                    <span>{pokemon.id}</span>
+            <div className="flex flex-col items-start text-slate-800">
+                {/* Numéro du Pokémon */}
+                <div className="font-semibold bg-black/30 text-white/75 w-fit pr-3 rounded-full flex items-center">
+                    <PokeballOriginalIcon className={clsx("size-6",
+                        {
+                            "opacity-30": !isCatched,
+                            "opacity-100": isCatched
+                        }
+                    )}/>
+                    <span className="ml-2">{pokemon.id}</span>
                 </div>
-                <h2 className="uppercase font-semibold my-2 text-xl">{pokemon.name}</h2>
 
-                <ul className="flex">
-                    {pokemon.types.map(({ type }) => (
-                        <li key={pokemon.name + type.name} className="flex items-center capitalize text-sm mr-2 bg-white/20 rounded-full pr-3">
-                            <span className="bg-white/50 p-1 rounded-full"><PokemonTypeIcon className="size-4 text-black/60" name={type.name}/></span>
-                            <span className="ml-2">{type.name}</span>
-                        </li>
-                    ))}
-                </ul>
+                {/* Nom du Pokémon */}
+                <h2 className="uppercase font-semibold my-2 text-xl">
+                    {pokemon.name}
+                </h2>
+
+                {/* Liste des types */}
+                <PokemonTypesList types={pokemon.types} />
             </div>
 
-            <div className="relative flex justify-center items-center h-full">
+            {/* Image et icône Pokéball */}
+            <div className="relative flex justify-center items-center h-full ml-auto pl-10">
                 <img
                     className="relative z-10 w-24 h-24 drop-shadow-md"
-                    src={pokemon.sprites.front_default}
+                    src={pokemon.sprites.other['official-artwork'].front_default}
                     alt={`Sprite of ${pokemon.name}`}
                 />
-                <PokeballIcon className="absolute z-0 size-44 rotate-45 -right-10 text-white/15"/>
+                <PokeballIcon
+                    className="absolute z-0 size-44 rotate-45 text-white/15"
+                />
             </div>
         </li>
     );
